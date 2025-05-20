@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather App - Aktuelles Wetter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="Bilder/weather.png" alt="WetterWunder Logo" class="logo">
+            </a>
+        </div>
+        <nav>
+            
+            <ul>
+                <li><a href="Aktuell.html">Aktuelles Wetter</a></li>
+                <li><a href="forecast_basel.html">Basel Vorhersage</a></li>
+                <li><a href="forecast_baden.html">Baden Vorhersage</a></li>
+                <li><a href="contact.html">Kontakt</a></li>
+            
+            </ul>
+        </nav>
+        <h1>Aktuelles Wetter</h1>
+        <P>Erfahren Sie das aktuelle Wetter in Ihrer Stadt mit unserer benutzerfreundlichen Wetter-App. Wählen Sie Ihre Stadt aus der Liste aus und erhalten Sie sofort die neuesten Wetterinformationen. Wir zeigen Ihnen die aktuelle Temperatur, die Regenmenge und die maximale Temperatur des Tages. Unser System verwendet die neuesten Wetterdaten, um Ihnen die genauesten Informationen zu liefern. Planen Sie Ihre Aktivitäten mit den aktuellen Wetterbedingungen in Basel, Genf, Zürich oder Bern. Unsere App bietet Ihnen eine einfache Möglichkeit, das Wetter in Ihrer Stadt zu überprüfen. Bei Fragen oder Anmerkungen können Sie uns jederzeit über die Kontaktseite erreichen. Vielen Dank, dass Sie WetterWunder verwenden, um auf dem Laufenden zu bleiben!</P>
+        <form id="weather-form">
+            <label for="city">Stadt:</label>
+            <select id="city" name="city">
+                <option value="Basel">Basel</option>
+                <option value="Genf">Genf</option>
+                <option value="Zürich">Zürich</option>
+                <option value="Bern">Bern</option>
+            </select>
+            <button type="submit">Wetter anzeigen</button>
+        </form>
+        <div id="weather-info">
+            <h2>Wetter in <span id="weather-city">Basel</span></h2>
+            <p>Temperatur: <span id="weather-temp">--</span> °C</p>
+            <p>Regenmenge: <span id="weather-rain">--</span> mm</p>
+            <p>Maximale Temperatur: <span id="weather-max-temp">--</span> °C</p>
+        </div>
+    
+            <img src="Bilder/clouds.svg" alt="wolken" style="display: none;" id="clouds-img">
+            <img src="Bilder/rain.svg" alt="regen" style="display: none;" id="rain-img">
+            <img src="Bilder/sun.svg" alt="sonne" style="display: none;" id="sun-img">
+
+
+            <script>
+                const cityCoordinates = {
+                    "Zürich": { latitude: 47.3769, longitude: 8.5417 },
+                    "Genf": { latitude: 46.2044, longitude: 6.1432 },
+                    "Basel": { latitude: 47.5584, longitude: 7.5733 },
+                    "Bern": { latitude: 46.9481, longitude: 7.4474 }
+                };
+
+                document.getElementById('weather-form').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const city = document.getElementById('city').value;
+                    const coordinates = cityCoordinates[city];
+                    const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coordinates.latitude}&longitude=${coordinates.longitude}&current_weather=true&daily=temperature_2m_max,rain_sum&timezone=Europe%2FBerlin`;
+
+                    fetch(apiUrl)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            const currentWeather = data.current_weather;
+                            const dailyWeather = data.daily;
+                            document.getElementById('weather-city').textContent = city;
+                            document.getElementById('weather-temp').textContent = currentWeather.temperature;
+                            document.getElementById('weather-rain').textContent = dailyWeather.rain_sum[0];
+                            document.getElementById('weather-max-temp').textContent = dailyWeather.temperature_2m_max[0];
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            document.getElementById('weather-info').innerHTML = `<p>Fehler beim Abrufen der Wetterdaten: ${error.message}</p>`;
+                        });
+                });
+                if (dailyForecasts[index].rainSum > 5) {
+                                        forecastDay.style.backgroundImage = 'url(Bilder/rain.svg)';
+                                    } else if (dailyForecasts[index].maxTemp < 15) {
+                                        forecastDay.style.backgroundImage = 'url(Bilder/clouds.svg)';
+                                    } else if (dailyForecasts[index].maxTemp >= 15) {
+                                        forecastDay.style.backgroundImage = 'url(Bilder/sun.svg)';
+                                    } else {
+                                        forecastDay.style.backgroundImage = 'none';
+                                    }
+            </script>
+        <nav>
+                <p>&copy; 2024 Mathieu Albrecht. Alle Rechte vorbehalten.</p>
+
+                <a href="index.html">Startseite</a> |
+                <a href="contact.html">Kontakt</a>
+        </nav>
+    </div>
+</body>
+
+</html>

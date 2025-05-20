@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Kontakt</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="Bilder/weather.png" alt="WetterWunder Logo" class="logo">
+            </a>
+        </div>
+        <nav>
+            
+            <ul>
+                <li><a href="Aktuell.html">Aktuelles Wetter</a></li>
+                <li><a href="forecast_basel.html">Basel Vorhersage</a></li>
+                <li><a href="forecast_baden.html">Baden Vorhersage</a></li>
+                <li><a href="contact.html">Kontakt</a></li>
+            
+            </ul>
+        </nav>
+        <h1>Kontakt</h1>
+        <p>Willkommen auf unserer Kontaktseite, auf der Sie uns bei Fragen und Anliegen erreichen können. Nutzen Sie das untenstehende Formular, um uns eine Nachricht zu senden. Geben Sie Ihren vollständigen Namen und Ihre E-Mail-Adresse an, damit wir Ihnen antworten können. Beschreiben Sie Ihr Anliegen im Nachrichtenfeld so detailliert wie möglich. Wir schätzen Ihr Feedback und sind stets bemüht, unseren Service zu verbessern. Besuchen Sie auch unsere Startseite, um mehr über unsere Wettervorhersagen zu erfahren. Vielen Dank, dass Sie WetterWunder kontaktiert haben!
+
+        </p>
+        <form id="fs-frm" name="simple-contact-form" accept-charset="utf-8" action="https://formspree.io/f/mleqvkge" method="post">
+            <fieldset id="fs-frm-inputs">
+                <label for="full-name">Full Name</label>
+                <input type="text" name="name" id="full-name" placeholder="First and Last" required>
+                <label for="email-address">Email Address</label>
+                <input type="email" name="_replyto" id="email-address" placeholder="email@domain.com" required>
+                <label for="message">Message</label>
+                <textarea rows="5" name="message" id="message" placeholder="What is your problem?" required></textarea>
+                <input type="hidden" name="_subject" id="email-subject" value="Contact Form Submission">
+            </fieldset>
+            <input type="submit" value="Submit">
+        </form>
+    
+        <nav>
+            <p>&copy; 2024 Mathieu Albrecht. Alle Rechte vorbehalten.</p>
+
+            <a href="index.html">Startseite</a> |
+            <a href="contact.html">Kontakt</a>
+        </nav>
+    </div>
+</body>
+</html>

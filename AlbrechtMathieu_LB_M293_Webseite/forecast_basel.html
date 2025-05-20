@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>7-Tage-Vorhersage für Basel</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <a href="index.html">
+                <img src="Bilder/weather.png" alt="WetterWunder Logo" class="logo">
+            </a>
+        </div>
+        <nav>
+            
+            <ul>
+                <li><a href="Aktuell.html">Aktuelles Wetter</a></li>
+                <li><a href="forecast_basel.html">Basel Vorhersage</a></li>
+                <li><a href="forecast_baden.html">Baden Vorhersage</a></li>
+                <li><a href="contact.html">Kontakt</a></li>
+            
+            </ul>
+        </nav>
+        <h1>7-Tage-Vorhersage für Basel</h1>
+        <p>Sehen Sie sich die detaillierte 7-Tage-Wettervorhersage für Basel an und erfahren Sie die täglichen Höchst- und Tiefsttemperaturen für die kommende Woche. Bleiben Sie informiert über die erwarteten Niederschlagsmengen in Basel. Unsere Vorhersage zeigt Ihnen das Wetter für jeden Tag der nächsten sieben Tage, wobei jede Vorhersage täglich aktualisiert wird, um Ihnen die genauesten Wetterdaten zu bieten. Planen Sie Ihre Woche mit unserer zuverlässigen und präzisen Wettervorhersage für Basel und sehen Sie, wann Sie mit Sonnenschein, Wolken oder Regen rechnen können. Nutzen Sie die praktischen Wetterinformationen, um Ihre Aktivitäten in Basel besser zu planen.</p>
+        <div id="forecast-container">
+            <div class="forecast-day">
+                <h3>Tag 1</h3>
+                <div class="forecast-details">
+                    <p>Max Temperatur: -- °C</p>
+                    <p>Min Temperatur: -- °C</p>
+                    <p>Niederschlag: -- mm</p>
+                </div>
+            </div>
+            <div class="forecast-day">
+                <h3>Tag 2</h3>
+                <div class="forecast-details">
+                    <p>Max Temperatur: -- °C</p>
+                    <p>Min Temperatur: -- °C</p>
+                    <p>Niederschlag: -- mm</p>
+                </div>
+            </div>
+            <div class="forecast-day">
+                <h3>Tag 3</h3>
+                <div class="forecast-details">
+                    <p>Max Temperatur: -- °C</p>
+                    <p>Min Temperatur: -- °C</p>
+                    <p>Niederschlag: -- mm</p>
+                </div>
+            </div>
+            <div class="forecast-day">
+                <h3>Tag 4</h3>
+                <div class="forecast-details">
+                    <p>Max Temperatur: -- °C</p>
+                    <p>Min Temperatur: -- °C</p>
+                    <p>Niederschlag: -- mm</p>
+                </div>
+            </div>
+            <div class="forecast-day">
+                <h3>Tag 5</h3>
+                <div class="forecast-details">
+                    <p>Max Temperatur: -- °C</p>
+                    <p>Min Temperatur: -- °C</p>
+                    <p>Niederschlag: -- mm</p>
+                </div>
+            </div>
+            <div class="forecast-day">
+                <h3>Tag 6</h3>
+                <div class="forecast-details">
+                    <p>Max Temperatur: -- °C</p>
+                    <p>Min Temperatur: -- °C</p>
+                    <p>Niederschlag: -- mm</p>
+                </div>
+            </div>
+            <div class="forecast-day">
+                <h3>Tag 7</h3>
+                <div class="forecast-details">
+                    <p>Max Temperatur: -- °C</p>
+                    <p>Min Temperatur: -- °C</p>
+                    <p>Niederschlag: -- mm</p>
+                </div>
+            </div>
+        </div>
+   
+
+        <img src="Bilder/clouds.svg" alt="wolken" style="display: none;" id="clouds-img">
+        <img src="Bilder/rain.svg" alt="regen" style="display: none;" id="rain-img">
+        <img src="Bilder/sun.svg" alt="sonne" style="display: none;" id="sun-img">
+
+        <script>
+            const cityCoordinates = {
+                "Basel": { latitude: 47.5584, longitude: 7.5733 },
+                "Baden": { latitude: 47.4728, longitude: 8.3083 }
+            };
+
+            const city = "Basel";
+            const forecastContainer = document.getElementById('forecast-container');
+            displayForecast(city);
+
+            function displayForecast(city) {
+                const coordinates = cityCoordinates[city];
+                const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${coordinates.latitude}&longitude=${coordinates.longitude}&daily=temperature_2m_max,temperature_2m_min,rain_sum&timezone=Europe%2FBerlin`;
+
+                fetch(apiUrl)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('API response:', data);
+                        const dailyForecasts = data.daily.time.map((time, index) => ({
+                            date: time,
+                            maxTemp: data.daily.temperature_2m_max[index],
+                            minTemp: data.daily.temperature_2m_min[index],
+                            rainSum: data.daily.rain_sum[index]
+                        }));
+
+                        const forecastDays = forecastContainer.querySelectorAll('.forecast-day');
+                        forecastDays.forEach((forecastDay, index) => {
+                            if (dailyForecasts[index]) {
+                                forecastDay.querySelector('h3').textContent = formatDate(dailyForecasts[index].date);
+                                forecastDay.querySelector('.forecast-details p:nth-child(1)').textContent = `Max Temperatur: ${dailyForecasts[index].maxTemp} °C`;
+                                forecastDay.querySelector('.forecast-details p:nth-child(2)').textContent = `Min Temperatur: ${dailyForecasts[index].minTemp} °C`;
+                                forecastDay.querySelector('.forecast-details p:nth-child(3)').textContent = `Niederschlag: ${dailyForecasts[index].rainSum} mm`;
+
+                                if (dailyForecasts[index].rainSum > 5) {
+                                    forecastDay.style.backgroundImage = 'url(Bilder/rain.svg)';
+                                } else if (dailyForecasts[index].maxTemp < 15) {
+                                    forecastDay.style.backgroundImage = 'url(Bilder/clouds.svg)';
+                                } else if (dailyForecasts[index].maxTemp >= 15) {
+                                    forecastDay.style.backgroundImage = 'url(Bilder/sun.svg)';
+                                } else {
+                                    forecastDay.style.backgroundImage = 'none';
+                                }
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        forecastContainer.innerHTML = `<p>Fehler beim Abrufen der Vorhersagedaten: ${error.message}</p>`;
+                    });
+            }
+
+            function formatDate(dateStr) {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('de-DE', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+        </script>
+    <nav>
+        <p>&copy; 2024 Mathieu Albrecht. Alle Rechte vorbehalten.</p>
+        <a href="index.html">Startseite</a> |
+        <a href="contact.html">Kontakt</a>
+    </nav>
+    </div>
+</body>
+</html>
